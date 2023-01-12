@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,16 @@ public class UserService {
             throw new RuntimeException("User already Exists");
         }
         return userRepository.save(user);
+    }
+    public User login(User user){
+        log.info("logging user {} with username {}",user.getFullName(),user.getUsername());
+        Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
+        if (optionalUser.isPresent() && Objects.equals(user.getPassword(), optionalUser.get().getPassword())){
+            log.info(optionalUser.get().toString());
+            return optionalUser.get();
+        }
+        throw new RuntimeException("Incorrect password or username!");
+
     }
     public Role saveRole(Role role){
         Optional<Role> optionalRole = roleRepository.findByName(role.getName());
@@ -70,13 +81,21 @@ public class UserService {
     }
 
     public void saveApplication(Participant participant) {
+        log.info("APPLICATION SUBMITTED");
         Optional<User> optionalUser = userRepository.findByUsername(participant.getUser().getUsername());
         if (optionalUser.isPresent()){
             if(!optionalUser.get().isApplied()){
                 participantRepository.save(participant);
+                userRepository.applied(participant.getUser().getId());
             }
-            throw new RuntimeException("Application already Submitted!");
+            else{
+                throw new RuntimeException("Application already Submitted!");
+            }
+
         }
-        throw new RuntimeException("User not found");
+        else{
+            throw new RuntimeException("User not found");
+        }
+
     }
 }

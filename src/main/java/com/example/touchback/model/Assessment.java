@@ -19,7 +19,7 @@ public class Assessment extends AbstractEntity {
     @ManyToOne
     private Survey survey;
     @ManyToOne
-    private Participant participant;
+    private User user;
     private Boolean completed;
     private LocalDate updated;
 }

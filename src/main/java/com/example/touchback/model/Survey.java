@@ -24,5 +24,4 @@ public class Survey extends AbstractEntity {
     @OneToMany
     List<Question> questionList;
 
-
 }

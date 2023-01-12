@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Participant extends AbstractEntity{
-    @OneToOne(cascade = CascadeType.A)
+    @OneToOne
     private User user;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
     private MartialStatus martialStatus;
 
